@@ -1,5 +1,11 @@
 
-
+/***************************************************
+ * Weather display by James Harris (jim.harris@antikytherallc.com)
+ * Based upon the e_Ink display example code from Adafruit with 
+ * Logic added to read the OpenWeather API, and graphical
+ * bitmaps translated to c-string from Alessio Atzeni's Meteo-Icons
+ * (Web: http://www.alessioatzeni.com)
+ */
 /***************************************************
   Adafruit invests time and resources providing this open source code,
   please support Adafruit and open-source hardware by purchasing
@@ -31,10 +37,10 @@ String DISPLAYED_CITY_NAME = "YourCity";
 int status = WL_IDLE_STATUS; 
 char server[] = "api.openweathermap.org"; 
 WiFiClient client;    
- #define SD_CS       14
-  #define SRAM_CS     32
-  #define EPD_CS      15
-  #define EPD_DC      33  
+#define SD_CS       14
+#define SRAM_CS     32
+#define EPD_CS      15
+#define EPD_DC      33  
 #define EPD_RESET   -1 // can set to -1 and share with microcontroller Reset!
 #define EPD_BUSY    -1 // can set to -1 to not use a pin (will wait a fixed delay)
 #define COLOR1 EPD_BLACK
@@ -114,7 +120,6 @@ void setup() {
   {
     delay(500);
     Serial.print(".");
-
     ++counter;
     if (counter >= 60){
       ESP.restart();
@@ -123,7 +128,7 @@ void setup() {
   
   Serial.println("connected");
 
-    getWeather(); 
+  getWeather(); 
 
   String line = ""; 
  while (client.connected()) { 
@@ -142,7 +147,7 @@ void setup() {
   }
  }
 
-     getForecast(); 
+   getForecast(); 
 
   String line2 = ""; 
  while (client.connected()) { 
@@ -187,30 +192,28 @@ void setup() {
  String nextWeather2 = doc2["list"][5]["weather"][0]["icon"];
  int nextWeatherid2 = doc2["list"][5]["weather"][0]["icon"];
  Serial.println(nextWeather0);
-  int todaytemp=(int)nextWeatherTime2;
-  int tomorrowtemp=(int)ninehours;
-  int thirddaytemp=(int)twelvehours;
-  int todaylow=(int)nextWeatherTime1;
-  int tomorrowlow=65;
-  int thirddaylow=71;
-  int current=(int)nextWeatherTime0;
-  uint8_t* todayicon=iconselect(nextWeather0, nextWeatherid);
-  uint8_t* tomorrowicon=iconselect(nextWeather1, nextWeatherid1);
-  uint8_t* thirdicon=iconselect(nextWeather2, nextWeatherid2);
-  display.begin();
+ int todaytemp=(int)nextWeatherTime2;
+ int tomorrowtemp=(int)ninehours;
+ int thirddaytemp=(int)twelvehours;
+ int todaylow=(int)nextWeatherTime1;
+ int tomorrowlow=65;
+ int thirddaylow=71;
+ int current=(int)nextWeatherTime0;
+ uint8_t* todayicon=iconselect(nextWeather0, nextWeatherid);
+ uint8_t* tomorrowicon=iconselect(nextWeather1, nextWeatherid1);
+ uint8_t* thirdicon=iconselect(nextWeather2, nextWeatherid2);
+ display.begin();
 
-  display.clearBuffer();
-  Serial.println("buffer cleared");
-  drawTodayWeather(todayicon,current ,todaytemp,  todaylow);
-  threeDay(tomorrowicon,thirdicon,tomorrowtemp, thirddaytemp, ninehdate, twelvehdate);
-  //display.display();
-  Serial.println("display.display now delay");
-  //display.display();
-  delay(1000); 
-  Serial.println("going to sleep");
-  esp_sleep_enable_timer_wakeup(36e8);
-  Serial.flush(); 
-  esp_deep_sleep_start();
+ display.clearBuffer();
+ Serial.println("buffer cleared");
+ drawTodayWeather(todayicon,current ,todaytemp,  todaylow);
+ threeDay(tomorrowicon,thirdicon,tomorrowtemp, thirddaytemp, ninehdate, twelvehdate);
+ Serial.println("display.display now delay");
+ delay(1000); 
+ Serial.println("going to sleep");
+ esp_sleep_enable_timer_wakeup(36e8);
+ Serial.flush(); 
+ esp_deep_sleep_start();
 }
 
 
@@ -218,14 +221,12 @@ void setup() {
 void drawTodayWeather(uint8_t* icon,int current ,int todaytemp,  int todaylow) {
   Serial.println("drawtodayweather");
   char high1[10];
-
   sprintf(high1, "High: %d",todaytemp);
   char low1[10];
   sprintf(low1, "Low: %d",todaylow);
   char currenttemp[10];
   sprintf(currenttemp, "Curr: %d",current);
   // large block of text
-
   if (current > 78){
     curcolor=COLOR2;
   } else {
@@ -248,9 +249,7 @@ void drawTodayWeather(uint8_t* icon,int current ,int todaytemp,  int todaylow) {
   testdrawtext(currenttemp,5,5, curcolor);
   testdrawtext(high1,5,20, todayhighcol);
   testdrawtext(low1,5,35, todaylowcol);
- 
-  display.drawBitmap(5, 50, icon, 50, 50, todayhighcol);
-  
+  display.drawBitmap(5, 50, icon, 50, 50, todayhighcol); 
   display.drawRect(0, 0, 65, 110, COLOR1);
   //display.display();
 }
