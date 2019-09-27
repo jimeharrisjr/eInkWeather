@@ -1,6 +1,6 @@
-## E-Ink Weather Station with OpenWeather by James Harris
+## E-Ink Weather Station with OpenWeatherMap by James Harris
 
-This repository is still in development. It is designed to pair the eInk Featherwing (https://openweathermap.org/current)
+This repository is still in development. It is designed to pair the eInk Featherwing (https://www.adafruit.com/product/4128)
 with the ESP-32 Feather Board (https://www.adafruit.com/product/3405)
 
 ### Requirements
